@@ -27,18 +27,33 @@
     <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
 
     <style>
-        /* CSS tuỳ chỉnh cho bản in */
+        /* CSS tuỳ chỉnh cho bản in chuyên nghiệp */
         @media print {
             body { background: white !important; margin: 0 !important; padding: 0 !important; }
             .no-print { display: none !important; }
             
-            /* Reset container để in chuẩn A4 */
-            .print-area-wrapper { background: none !important; padding: 0 !important; overflow: visible !important; height: auto !important; display: block !important;}
+            /* Cấu hình lề A4 chuẩn 20mm */
+            @page { 
+                size: A4; 
+                margin: 20mm; /* Lề chuẩn chuyên nghiệp */
+            }
+
+            .print-area-wrapper { 
+                background: none !important; 
+                padding: 0 !important; 
+                overflow: visible !important; 
+                height: auto !important; 
+                display: block !important;
+            }
             
-            /* Hủy Zoom khi in */
-            .zoom-wrapper { transform: none !important; width: 100% !important; gap: 0 !important; display: block !important; margin: 0 !important; padding: 0 !important; }
+            .zoom-wrapper { 
+                transform: none !important; 
+                width: 100% !important; 
+                display: block !important; 
+                margin: 0 !important; 
+                padding: 0 !important; 
+            }
             
-            /* In từng trang riêng rẽ */
             .print-paper { 
                 width: 100% !important; 
                 max-width: none !important; 
@@ -46,43 +61,44 @@
                 margin: 0 !important; 
                 padding: 0 !important; 
                 page-break-after: always; 
-                min-height: 296mm !important; 
-                display: block !important;
+                min-height: auto !important;
+                background: white !important;
             }
-            .print-paper:last-child { page-break-after: auto; }
 
-            @page { size: A4; margin: 0; } /* Để padding của .markdown-body kiểm soát lề */
+            .markdown-body {
+                padding: 0 !important; /* Lề do @page margin 20mm kiểm soát */
+            }
         }
 
         /* Định dạng chung cho Preview */
-        .markdown-body h1 { font-size: 1.5rem; font-weight: bold; text-align: center; text-transform: uppercase; margin-bottom: 1rem; }
+        .markdown-body h1 { font-size: 1.5rem; font-weight: bold; text-align: center; text-transform: uppercase; margin-bottom: 1rem; color: #111; }
         .markdown-body h3 { font-size: 1.1rem; font-weight: bold; margin-top: 1.5rem; margin-bottom: 0.5rem; }
         .markdown-body p { margin-bottom: 0.75rem; line-height: 1.6; }
         
-        /* CẤU HÌNH BẢNG CHỐNG LỖI IN */
+        /* Cấu hình bảng */
         .markdown-body table { 
             width: 100%; 
             border-collapse: collapse; 
-            margin-bottom: 1rem; 
+            margin-bottom: 1.5rem; 
             table-layout: auto;
         }
         .markdown-body th, .markdown-body td { 
             border: 1px solid #000; 
-            padding: 8px 12px; 
+            padding: 10px 14px; 
             vertical-align: middle;
             word-break: normal;
         }
         
-        /* KHÔNG NGẮT DÒNG CỘT TIÊU ĐỀ */
+        /* Không ngắt dòng cột tiêu đề */
         .markdown-body table tr th:first-child,
         .markdown-body table tr td:first-child {
             white-space: nowrap !important;
             width: 1%;
-            background-color: rgba(0,0,0,0.02);
+            background-color: #f8fafc;
             font-weight: bold;
         }
 
-        /* GIỮ CÔNG THỨC TOÁN TRÊN 1 DÒNG TRONG BẢNG */
+        /* Giữ công thức toán trên 1 dòng */
         .markdown-body td .katex-display,
         .markdown-body td .katex {
             white-space: nowrap;
@@ -93,19 +109,22 @@
         .markdown-body hr { margin: 1.5rem 0; border-top: 2px dashed #e5e7eb; }
 
         /* Themes */
-        .theme-creative.markdown-body h1 { color: #2563eb; letter-spacing: 1px; }
-        .theme-creative.markdown-body h3 { color: #d97706; border-bottom: 2px solid #fcd34d; padding-bottom: 4px; display: inline-block; }
+        .theme-creative.markdown-body h1 { color: #1e40af; border-bottom: 3px double #1e40af; padding-bottom: 4px; }
+        .theme-creative.markdown-body h3 { color: #b45309; border-bottom: 2px solid #fbbf24; padding-bottom: 2px; display: inline-block; }
+        
         .theme-standard.markdown-body { color: #111827; }
-        .theme-standard.markdown-body h1 { border-bottom: 1px solid #000; padding-bottom: 5px; }
+        .theme-standard.markdown-body h1 { border-bottom: 2px solid #000; padding-bottom: 5px; }
+
         .theme-minimalist.markdown-body { color: #000; }
         .theme-minimalist.markdown-body h1 { border-bottom: 2px solid #000; text-align: center; }
+        .theme-minimalist.markdown-body table tr td:first-child { background: none; }
 
         /* Dòng kẻ chấm */
         .dotted-line {
-            border-bottom: 1px dotted #9ca3af;
+            border-bottom: 1px dotted #64748b;
             display: block;
-            height: 24px;
-            margin-bottom: 8px;
+            height: 28px;
+            margin-bottom: 10px;
             width: 100%;
         }
 
@@ -176,7 +195,6 @@ Em hãy hoàn thành bảng dưới đây để tự xây dựng công thức:
 ✦ **Mức độ Vận dụng (Thử thách Conan)**
 ➢ Cho đường thẳng $\\Delta: 3x - 4y + 5 = 0$. Viết PT đường tròn tâm $I(2; 1)$ và tiếp xúc $\\Delta$.
 ...................................................................................................................................
-...................................................................................................................................
 
 ### **V. TỰ ĐÁNH GIÁ**
 * [ ] 😄 **Cười tươi:** Em đã hiểu bài và tự làm được bài tập.
@@ -187,13 +205,12 @@ Em hãy hoàn thành bảng dưới đây để tự xây dựng công thức:
             const [theme, setTheme] = useState('theme-creative');
             const [fontFamily, setFontFamily] = useState("'Times New Roman', Times, serif");
             const [fontSize, setFontSize] = useState(12);
-            const [zoom, setZoom] = useState(0.75); 
+            const [zoom, setZoom] = useState(0.70); 
             
             const [showPromptModal, setShowPromptModal] = useState(false);
             const [pSubject, setPSubject] = useState('Toán');
             const [pGrade, setPGrade] = useState('10');
             const [pTopic, setPTopic] = useState('Phương trình đường tròn');
-            const [pExtra, setPExtra] = useState('');
             const [copySuccess, setCopySuccess] = useState(false);
 
             const previewRef = useRef(null);
@@ -242,67 +259,67 @@ YÊU CẦU:
                         </div>
                         
                         <div class="flex gap-3 items-center flex-wrap justify-end">
-                            <button onClick={() => setShowPromptModal(true)} class="bg-blue-500 text-white px-3 py-1 rounded text-xs font-bold">AI Prompt</button>
+                            <button onClick={() => setShowPromptModal(true)} class="bg-blue-500 text-white px-3 py-1 rounded text-xs font-bold shadow-sm">AI Prompt</button>
 
-                            <div class="flex items-center gap-1 bg-indigo-600 px-2 py-1 rounded border border-indigo-500">
-                                <label class="text-xs font-semibold">Zoom:</label>
+                            <div class="flex items-center gap-1 bg-indigo-600 px-2 py-1 rounded">
+                                <label class="text-xs font-semibold">Xem thử:</label>
                                 <div class="flex items-center gap-1">
-                                    <button onClick={() => setZoom(Math.max(0.4, zoom - 0.1))} class="text-white font-bold px-1 text-xs">-</button>
+                                    <button onClick={() => setZoom(Math.max(0.3, zoom - 0.05))} class="text-white font-bold px-1 text-xs">-</button>
                                     <span class="text-white text-xs w-8 text-center">{Math.round(zoom * 100)}%</span>
-                                    <button onClick={() => setZoom(Math.min(1.5, zoom + 0.1))} class="text-white font-bold px-1 text-xs">+</button>
+                                    <button onClick={() => setZoom(Math.min(1.2, zoom + 0.05))} class="text-white font-bold px-1 text-xs">+</button>
                                 </div>
                             </div>
 
                             <select class="bg-indigo-600 text-white text-xs px-2 py-1 rounded outline-none" value={fontFamily} onChange={(e) => setFontFamily(e.target.value)}>
                                 <option value="'Times New Roman', Times, serif">Times New Roman</option>
-                                <option value="Arial, Helvetica, sans-serif">Arial</option>
                                 <option value="'Be Vietnam Pro', sans-serif">Be Vietnam Pro</option>
-                                <option value="'Nunito', sans-serif">Nunito</option>
+                                <option value="'Roboto', sans-serif">Roboto</option>
                             </select>
 
                             <select class="bg-indigo-600 text-white text-xs px-2 py-1 rounded outline-none" value={theme} onChange={(e) => setTheme(e.target.value)}>
-                                <option value="theme-minimalist">Tối giản (In ấn)</option>
                                 <option value="theme-standard">Chuẩn mực</option>
                                 <option value="theme-creative">Sáng tạo</option>
+                                <option value="theme-minimalist">Tối giản (Tiết kiệm)</option>
                                 <option value="theme-competency">Năng lực</option>
                             </select>
 
                             <div class="flex items-center gap-1 bg-indigo-600 px-2 py-1 rounded">
-                                <label class="text-xs font-semibold">Size:</label>
+                                <label class="text-xs font-semibold">Cỡ chữ:</label>
                                 <button onClick={() => setFontSize(Math.max(8, fontSize - 1))} class="text-white font-bold px-1 text-xs">-</button>
-                                <span class="text-white text-xs w-4 text-center">{fontSize}</span>
+                                <span class="text-white text-xs w-4 text-center font-bold">{fontSize}</span>
                                 <button onClick={() => setFontSize(Math.min(14, fontSize + 1))} class="text-white font-bold px-1 text-xs">+</button>
                             </div>
 
-                            <button onClick={() => window.print()} class="bg-green-500 text-white px-4 py-1.5 rounded text-sm font-bold shadow transition ml-2">Xem / In PDF</button>
+                            <button onClick={() => window.print()} class="bg-green-600 hover:bg-green-500 text-white px-5 py-1.5 rounded text-sm font-bold shadow-md transition-all ml-2">Xuất / In PDF</button>
                         </div>
                     </header>
 
                     {/* Main Workspace */}
                     <main class="flex flex-1 overflow-hidden">
                         <div class="w-1/2 p-4 flex flex-col border-r bg-white no-print shrink-0 z-10 shadow-lg">
+                            <div class="mb-2 text-xs font-bold text-gray-500 uppercase tracking-wider">Trình soạn thảo</div>
                             <textarea 
-                                class="flex-1 w-full p-4 border rounded-md font-mono text-sm resize-none focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-slate-50"
+                                class="flex-1 w-full p-4 border rounded-md font-mono text-sm resize-none focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-slate-50 leading-relaxed shadow-inner"
                                 value={markdown}
                                 onChange={(e) => setMarkdown(e.target.value)}
                                 spellcheck="false"
                             ></textarea>
                         </div>
 
-                        <div class="w-1/2 bg-[#525659] overflow-y-auto flex flex-col items-center py-8 print-area-wrapper relative">
+                        <div class="w-1/2 bg-gray-600 overflow-y-auto flex flex-col items-center py-10 print-area-wrapper relative">
                             <div 
-                                class="zoom-wrapper flex flex-col items-center gap-8" 
+                                class="zoom-wrapper flex flex-col items-center gap-10" 
                                 style={{ transform: `scale(${zoom})`, transformOrigin: 'top center' }}
                                 ref={previewRef}
                             >
                                 {pages.map((pageContent, index) => (
                                     <div key={index} class="bg-white w-[210mm] min-h-[297mm] shadow-2xl print-paper relative shrink-0">
                                         <div 
-                                            class={`markdown-body ${theme} p-[15mm] h-full`} 
+                                            class={`markdown-body ${theme} p-[20mm] h-full`} 
                                             style={{ fontFamily: fontFamily, fontSize: fontSize + 'px' }}
                                             dangerouslySetInnerHTML={processMarkdownPage(pageContent)} 
                                         />
-                                        <div class="absolute bottom-4 right-4 text-gray-400 text-xs no-print">Trang {index + 1}</div>
+                                        <div class="absolute bottom-6 right-8 text-gray-400 text-xs no-print font-sans">Mô phỏng A4 - Trang {index + 1}</div>
                                     </div>
                                 ))}
                             </div>
@@ -311,18 +328,30 @@ YÊU CẦU:
 
                     {/* Modal Prompt Generator */}
                     {showPromptModal && (
-                        <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 no-print p-4">
-                            <div class="bg-white rounded-lg shadow-xl w-full max-w-lg p-6 flex flex-col gap-4">
-                                <h3 class="text-lg font-bold text-indigo-800">🤖 Trợ Lý Soạn Lệnh AI</h3>
-                                <div class="grid grid-cols-2 gap-2">
-                                    <input type="text" value={pSubject} onChange={e => setPSubject(e.target.value)} class="border rounded p-2 text-sm" placeholder="Môn học"/>
-                                    <input type="text" value={pGrade} onChange={e => setPGrade(e.target.value)} class="border rounded p-2 text-sm" placeholder="Lớp"/>
+                        <div class="fixed inset-0 bg-black/60 flex items-center justify-center z-50 no-print p-4 backdrop-blur-sm">
+                            <div class="bg-white rounded-xl shadow-2xl w-full max-w-lg p-7 flex flex-col gap-4 border border-indigo-100">
+                                <h3 class="text-xl font-bold text-indigo-900 border-b pb-2">🤖 Trợ Lý Soạn Lệnh AI</h3>
+                                <div class="grid grid-cols-2 gap-3">
+                                    <div class="flex flex-col gap-1">
+                                        <label class="text-[10px] font-bold text-gray-400 uppercase">Môn học</label>
+                                        <input type="text" value={pSubject} onChange={e => setPSubject(e.target.value)} class="border rounded p-2 text-sm focus:ring-1 ring-indigo-500 outline-none"/>
+                                    </div>
+                                    <div class="flex flex-col gap-1">
+                                        <label class="text-[10px] font-bold text-gray-400 uppercase">Khối lớp</label>
+                                        <input type="text" value={pGrade} onChange={e => setPGrade(e.target.value)} class="border rounded p-2 text-sm focus:ring-1 ring-indigo-500 outline-none"/>
+                                    </div>
                                 </div>
-                                <input type="text" value={pTopic} onChange={e => setPTopic(e.target.value)} class="border rounded p-2 text-sm" placeholder="Tên bài"/>
-                                <textarea readOnly value={generatedPrompt} class="w-full bg-gray-50 border border-dashed rounded p-3 text-xs font-mono h-32 focus:outline-none"></textarea>
-                                <div class="flex justify-end gap-3 pt-2">
-                                    <button onClick={() => setShowPromptModal(false)} class="px-4 py-2 border rounded text-sm hover:bg-gray-100 transition">Đóng</button>
-                                    <button onClick={handleCopyPrompt} class="px-4 py-2 bg-indigo-600 text-white rounded font-bold text-sm shadow transition">
+                                <div class="flex flex-col gap-1">
+                                    <label class="text-[10px] font-bold text-gray-400 uppercase">Tên bài học</label>
+                                    <input type="text" value={pTopic} onChange={e => setPTopic(e.target.value)} class="border rounded p-2 text-sm focus:ring-1 ring-indigo-500 outline-none"/>
+                                </div>
+                                <div class="flex flex-col gap-1">
+                                    <label class="text-[10px] font-bold text-gray-400 uppercase">Kết quả Prompt</label>
+                                    <textarea readOnly value={generatedPrompt} class="w-full bg-gray-50 border border-dashed rounded p-3 text-xs font-mono h-32 focus:outline-none"></textarea>
+                                </div>
+                                <div class="flex justify-end gap-3 pt-3">
+                                    <button onClick={() => setShowPromptModal(false)} class="px-5 py-2 border rounded text-sm hover:bg-gray-100 font-medium transition">Đóng</button>
+                                    <button onClick={handleCopyPrompt} class="px-5 py-2 bg-indigo-600 text-white rounded font-bold text-sm shadow-md hover:bg-indigo-700 transition">
                                         {copySuccess ? "✔ Đã Copy!" : "Copy Prompt"}
                                     </button>
                                 </div>
