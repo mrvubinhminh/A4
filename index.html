@@ -29,86 +29,78 @@
     <style>
         /* CSS tuỳ chỉnh cho bản in */
         @media print {
-            body { background: white; margin: 0; padding: 0; }
+            body { background: white !important; margin: 0 !important; padding: 0 !important; }
             .no-print { display: none !important; }
             
             /* Reset container để in chuẩn A4 */
-            .print-area-wrapper { background: none !important; padding: 0 !important; overflow: visible !important; height: auto !important;}
+            .print-area-wrapper { background: none !important; padding: 0 !important; overflow: visible !important; height: auto !important; display: block !important;}
             
             /* Hủy Zoom khi in */
             .zoom-wrapper { transform: none !important; width: 100% !important; gap: 0 !important; display: block !important; margin: 0 !important; padding: 0 !important; }
             
             /* In từng trang riêng rẽ */
-            .print-paper { width: 100% !important; max-width: none !important; box-shadow: none !important; margin: 0 !important; padding: 0 !important; page-break-after: always; min-height: auto !important; }
+            .print-paper { 
+                width: 100% !important; 
+                max-width: none !important; 
+                box-shadow: none !important; 
+                margin: 0 !important; 
+                padding: 0 !important; 
+                page-break-after: always; 
+                min-height: 296mm !important; 
+                display: block !important;
+            }
             .print-paper:last-child { page-break-after: auto; }
 
-            @page { size: A4; margin: 15mm; }
+            @page { size: A4; margin: 0; } /* Để padding của .markdown-body kiểm soát lề */
         }
 
         /* Định dạng chung cho Preview */
         .markdown-body h1 { font-size: 1.5rem; font-weight: bold; text-align: center; text-transform: uppercase; margin-bottom: 1rem; }
         .markdown-body h3 { font-size: 1.1rem; font-weight: bold; margin-top: 1.5rem; margin-bottom: 0.5rem; }
         .markdown-body p { margin-bottom: 0.75rem; line-height: 1.6; }
-        .markdown-body table { width: 100%; border-collapse: collapse; margin-bottom: 1rem; }
-        .markdown-body th, .markdown-body td { border: 1px solid #ccc; padding: 0.5rem; }
+        
+        /* CẤU HÌNH BẢNG CHỐNG LỖI IN */
+        .markdown-body table { 
+            width: 100%; 
+            border-collapse: collapse; 
+            margin-bottom: 1rem; 
+            table-layout: auto;
+        }
+        .markdown-body th, .markdown-body td { 
+            border: 1px solid #000; 
+            padding: 8px 12px; 
+            vertical-align: middle;
+            word-break: normal;
+        }
+        
+        /* KHÔNG NGẮT DÒNG CỘT TIÊU ĐỀ */
+        .markdown-body table tr th:first-child,
+        .markdown-body table tr td:first-child {
+            white-space: nowrap !important;
+            width: 1%;
+            background-color: rgba(0,0,0,0.02);
+            font-weight: bold;
+        }
+
+        /* GIỮ CÔNG THỨC TOÁN TRÊN 1 DÒNG TRONG BẢNG */
+        .markdown-body td .katex-display,
+        .markdown-body td .katex {
+            white-space: nowrap;
+        }
+
         .markdown-body blockquote { background-color: #f3f4f6; border-left: 4px solid #3b82f6; padding: 1rem; margin: 1rem 0; font-style: normal; border-radius: 0.25rem; }
         .markdown-body ul { list-style-type: disc; padding-left: 1.5rem; margin-bottom: 1rem; }
         .markdown-body hr { margin: 1.5rem 0; border-top: 2px dashed #e5e7eb; }
 
-        /* Theme: Sáng tạo (Gamified) */
+        /* Themes */
         .theme-creative.markdown-body h1 { color: #2563eb; letter-spacing: 1px; }
         .theme-creative.markdown-body h3 { color: #d97706; border-bottom: 2px solid #fcd34d; padding-bottom: 4px; display: inline-block; }
-        .theme-creative.markdown-body blockquote { background-color: #ecfeff; border-left-color: #06b6d4; }
-        .theme-creative.markdown-body th { background-color: #fef3c7; color: #b45309; }
-        
-        /* Theme: Chuẩn mực (Standard) */
         .theme-standard.markdown-body { color: #111827; }
         .theme-standard.markdown-body h1 { border-bottom: 1px solid #000; padding-bottom: 5px; }
-        .theme-standard.markdown-body h3 { text-decoration: underline; }
-        .theme-standard.markdown-body th { background-color: #f9fafb; font-weight: bold; }
-
-        /* Theme: Năng lực (Competency) */
-        .theme-competency.markdown-body { color: #1f2937; }
-        .theme-competency.markdown-body h1 { background: linear-gradient(90deg, #10b981 0%, #3b82f6 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .theme-competency.markdown-body h3 { background-color: #e0e7ff; padding: 4px 12px; border-radius: 20px; color: #4338ca; display: inline-block; }
-        .theme-competency.markdown-body table { box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); border-radius: 8px; overflow: hidden; }
-        .theme-competency.markdown-body th { background-color: #4f46e5; color: white; border: none;}
-        .theme-competency.markdown-body td { border: 1px solid #e5e7eb; }
-
-        /* Theme 4: Tối giản (Minimalist - Chuyên in ấn) */
         .theme-minimalist.markdown-body { color: #000; }
-        .theme-minimalist.markdown-body h1, .theme-minimalist.markdown-body h2, .theme-minimalist.markdown-body h3 { color: #000; background: none; padding: 0; border-radius: 0; -webkit-text-fill-color: initial; }
         .theme-minimalist.markdown-body h1 { border-bottom: 2px solid #000; text-align: center; }
-        .theme-minimalist.markdown-body h3 { border-bottom: 1px solid #000; display: inline-block; margin-bottom: 0.5em; text-decoration: none; }
-        .theme-minimalist.markdown-body table, .theme-minimalist.markdown-body th, .theme-minimalist.markdown-body td { border: 1px solid #000; box-shadow: none; }
-        .theme-minimalist.markdown-body th { background-color: transparent; color: #000; font-weight: bold; border-bottom: 2px solid #000; }
-        .theme-minimalist.markdown-body blockquote { border-left: 3px solid #000; background-color: transparent; padding-left: 1rem; }
 
-        /* Theme 5: Học thuật (Academic) */
-        .theme-academic.markdown-body { color: #111; line-height: 1.8; }
-        .theme-academic.markdown-body h1 { text-align: center; font-variant: small-caps; border-bottom: 1px solid #aaa; letter-spacing: 1px; }
-        .theme-academic.markdown-body h3 { text-decoration: none; border-bottom: 1px dotted #ccc; display: block; }
-        .theme-academic.markdown-body th { background-color: #eee; border: 1px solid #666; }
-        .theme-academic.markdown-body td { border: 1px solid #666; }
-        .theme-academic.markdown-body blockquote { font-style: italic; border-left: 4px solid #aaa; background: #fafafa; }
-
-        /* Theme 6: Thanh lịch (Elegant) */
-        .theme-elegant.markdown-body { color: #374151; font-weight: 300; }
-        .theme-elegant.markdown-body h1 { font-weight: 300; letter-spacing: 2px; text-transform: uppercase; border-bottom: 1px solid #e5e7eb; padding-bottom: 10px; color: #111827; }
-        .theme-elegant.markdown-body h3 { font-weight: 600; color: #4b5563; border-left: 3px solid #9ca3af; padding-left: 10px; border-bottom: none; background: transparent; }
-        .theme-elegant.markdown-body table { border: none; border-top: 2px solid #d1d5db; border-bottom: 2px solid #d1d5db; box-shadow: none; }
-        .theme-elegant.markdown-body th { border: none; border-bottom: 1px solid #d1d5db; background: transparent; color: #111827; }
-        .theme-elegant.markdown-body td { border: none; border-bottom: 1px dashed #e5e7eb; }
-        
-        /* Theme 7: Vui nhộn (Playful) */
-        .theme-playful.markdown-body { color: #4b5563; }
-        .theme-playful.markdown-body h1 { background-color: #fef08a; display: inline-block; padding: 10px 20px; border-radius: 30px; border: 2px dashed #f59e0b; color: #b45309; }
-        .theme-playful.markdown-body h3 { background-color: #bfdbfe; color: #1d4ed8; padding: 5px 15px; border-radius: 15px; border: 2px solid #60a5fa; }
-        .theme-playful.markdown-body table { border: 2px solid #93c5fd; overflow: hidden; border-radius: 12px; border-collapse: separate; border-spacing: 0; box-shadow: none; }
-        .theme-playful.markdown-body th { background-color: #dbeafe; color: #1e40af; border-bottom: 2px solid #93c5fd; }
-        .theme-playful.markdown-body td { border-bottom: 1px solid #e2e8f0; }
-
-        /* Tùy chỉnh dòng chấm cho học sinh viết */
+        /* Dòng kẻ chấm */
         .dotted-line {
             border-bottom: 1px dotted #9ca3af;
             display: block;
@@ -117,11 +109,9 @@
             width: 100%;
         }
 
-        /* Tùy chỉnh thanh cuộn */
         .print-area-wrapper::-webkit-scrollbar { width: 10px; }
         .print-area-wrapper::-webkit-scrollbar-track { background: #cbd5e1; }
         .print-area-wrapper::-webkit-scrollbar-thumb { background: #64748b; border-radius: 5px; }
-        .print-area-wrapper::-webkit-scrollbar-thumb:hover { background: #475569; }
     </style>
 </head>
 <body class="bg-gray-100 min-h-screen text-gray-800 flex flex-col h-screen overflow-hidden">
@@ -154,9 +144,9 @@ Em hãy hoàn thành bảng dưới đây để tự xây dựng công thức:
 
 | Bước dẫn dắt | Nội dung thực hiện | Kết quả đúc kết của em |
 | :--- | :--- | :--- |
-| **1. Tọa độ tâm** | Cho đường tròn $(C)$ tâm $I(a; b)$ và bán kính $R$. Lấy điểm $M(x; y)$ thuộc $(C)$. | Độ dài $IM =$ ........................ |
-| **2. Khoảng cách** | Tính bình phương khoảng cách: $IM^2 = R^2$ | $(x - \\dots)^2 + (y - \\dots)^2 =$ ............ |
-| **3. Khai triển** | Khai triển hằng đẳng thức từ biểu thức vừa tìm được ở trên. | $x^2 + y^2 - 2ax - 2by + \\dots = 0$ |
+| **1. Tọa độ tâm** | Cho đường tròn $(C)$ tâm $I(a; b)$ và bán kính $R$. Lấy điểm $M(x; y) \in (C)$. | Độ dài $IM =$ ........................ |
+| **2. Khoảng cách** | Tính bình phương khoảng cách: $IM^2 = R^2$ | $(x-a)^2 + (y-b)^2 =$ ............ |
+| **3. Khai triển** | Khai triển hằng đẳng thức từ biểu thức vừa tìm được ở trên. | $x^2 + y^2 - 2ax - 2by + c = 0$ |
 
 ===
 
@@ -197,7 +187,6 @@ Em hãy hoàn thành bảng dưới đây để tự xây dựng công thức:
             const [theme, setTheme] = useState('theme-creative');
             const [fontFamily, setFontFamily] = useState("'Times New Roman', Times, serif");
             const [fontSize, setFontSize] = useState(12);
-            // State Zoom mới: Mặc định thu nhỏ 75% để vừa vặn màn hình
             const [zoom, setZoom] = useState(0.75); 
             
             const [showPromptModal, setShowPromptModal] = useState(false);
@@ -209,61 +198,39 @@ Em hãy hoàn thành bảng dưới đây để tự xây dựng công thức:
 
             const previewRef = useRef(null);
 
-            // Hàm xử lý cắt trang và render Markdown
             const processMarkdownPage = (mdContent) => {
                 let html = marked.parse(mdContent);
-                // Tạo các dòng chấm tự động
                 html = html.replace(/\.{15,}/g, '<span class="dotted-line"></span>');
                 return { __html: html };
             };
 
-            // Tách nội dung thành mảng các trang dựa trên ký hiệu ===
             const pages = markdown.split(/^===$/gm);
 
-            // Hook render Toán học chạy trên toàn bộ wrapper chứa các trang
             useEffect(() => {
                 if (previewRef.current) {
                     renderMathInElement(previewRef.current, {
                         delimiters: [
                             {left: '$$', right: '$$', display: true},
-                            {left: '$', right: '$', display: false},
-                            {left: '\\(', right: '\\)', display: false},
-                            {left: '\\[', right: '\\]', display: true}
+                            {left: '$', right: '$', display: false}
                         ],
                         throwOnError: false
                     });
                 }
             }, [markdown, theme, fontFamily, fontSize, zoom]); 
 
-            // Prompt tự động sinh ra
-            const generatedPrompt = `Hãy đóng vai một giáo viên ${pSubject} xuất sắc và giàu kinh nghiệm. Bạn hãy soạn một "Phiếu học tập tự học" dành cho học sinh lớp ${pGrade} về chủ đề: "${pTopic}".
+            const generatedPrompt = `Hãy đóng vai một giáo viên ${pSubject} xuất sắc. Bạn hãy soạn một "Phiếu học tập tự học" dành cho học sinh lớp ${pGrade} về chủ đề: "${pTopic}".
 
-YÊU CẦU ĐỊNH DẠNG BẮT BUỘC:
+YÊU CẦU:
 1. Dùng chuẩn Markdown.
-2. Công thức toán học BẮT BUỘC đặt trong dấu $ (inline) hoặc $$ (block) theo chuẩn LaTeX. Không dùng mã Unicode.
-3. Chỗ nào cần không gian cho học sinh điền/viết tự luận, hãy gõ đúng 15 dấu chấm liên tiếp "..............." (hệ thống sẽ tự động vẽ dòng kẻ đứt khúc).
-4. Quan trọng: Hãy tính toán độ dài. Nếu dài hơn 1 trang A4, BẮT BUỘC sử dụng 3 dấu bằng "===" trên một dòng riêng biệt để cắt sang trang giấy mới.
-5. Cấu trúc phiếu gợi ý:
-   - Phần đầu: Tên bài, Họ tên, Lớp.
-   - I. Khởi động (Tình huống thực tế).
-   - II. Khám phá (Bảng step-by-step).
-   - III. Chốt kiến thức.
-   - IV. Luyện tập.
-   - V. Tự đánh giá.${pExtra ? `\n\nYÊU CẦU ĐẶC BIỆT THÊM:\n${pExtra}` : ''}
-
-Lưu ý: Chỉ trả về nội dung Markdown.`;
+2. Công thức toán học đặt trong dấu $ hoặc $$.
+3. Dùng 15 dấu chấm "..............." để tạo dòng kẻ.
+4. Dùng "===" để ngắt trang.`;
 
             const handleCopyPrompt = () => {
-                const textArea = document.createElement("textarea");
-                textArea.value = generatedPrompt;
-                document.body.appendChild(textArea);
-                textArea.select();
-                try {
-                    document.execCommand('copy');
+                navigator.clipboard.writeText(generatedPrompt).then(() => {
                     setCopySuccess(true);
                     setTimeout(() => setCopySuccess(false), 3000);
-                } catch (err) {}
-                document.body.removeChild(textArea);
+                });
             };
 
             return (
@@ -271,148 +238,91 @@ Lưu ý: Chỉ trả về nội dung Markdown.`;
                     {/* Header bar */}
                     <header class="bg-indigo-700 text-white p-3 shadow-md no-print flex justify-between items-center z-20 shrink-0">
                         <div class="flex items-center gap-2">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
                             <h1 class="text-lg font-bold">Trình Tạo Phiếu Học Tập A4</h1>
                         </div>
                         
                         <div class="flex gap-3 items-center flex-wrap justify-end">
-                            <button 
-                                onClick={() => setShowPromptModal(true)}
-                                class="bg-blue-500 hover:bg-blue-400 text-white px-3 py-1 rounded text-sm font-bold flex items-center gap-1 shadow transition"
-                            >
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
-                                AI Prompt
-                            </button>
+                            <button onClick={() => setShowPromptModal(true)} class="bg-blue-500 text-white px-3 py-1 rounded text-xs font-bold">AI Prompt</button>
 
-                            {/* Zoom Control */}
                             <div class="flex items-center gap-1 bg-indigo-600 px-2 py-1 rounded border border-indigo-500">
-                                <label class="text-xs font-semibold text-indigo-100" title="Thu phóng giấy A4">Zoom:</label>
+                                <label class="text-xs font-semibold">Zoom:</label>
                                 <div class="flex items-center gap-1">
-                                    <button onClick={() => setZoom(Math.max(0.4, zoom - 0.1))} class="text-white hover:text-yellow-300 font-bold px-1">-</button>
+                                    <button onClick={() => setZoom(Math.max(0.4, zoom - 0.1))} class="text-white font-bold px-1 text-xs">-</button>
                                     <span class="text-white text-xs w-8 text-center">{Math.round(zoom * 100)}%</span>
-                                    <button onClick={() => setZoom(Math.min(1.5, zoom + 0.1))} class="text-white hover:text-yellow-300 font-bold px-1">+</button>
+                                    <button onClick={() => setZoom(Math.min(1.5, zoom + 0.1))} class="text-white font-bold px-1 text-xs">+</button>
                                 </div>
                             </div>
 
-                            <div class="flex items-center gap-1 bg-indigo-600 px-2 py-1 rounded">
-                                <label class="text-xs font-semibold text-indigo-100">Font:</label>
-                                <select 
-                                    class="bg-transparent text-white text-sm border-none outline-none cursor-pointer"
-                                    value={fontFamily} onChange={(e) => setFontFamily(e.target.value)}
-                                >
-                                    <option value="'Times New Roman', Times, serif" class="text-black">Times New Roman</option>
-                                    <option value="Arial, Helvetica, sans-serif" class="text-black">Arial</option>
-                                    <option value="'Be Vietnam Pro', sans-serif" class="text-black">Be Vietnam Pro</option>
-                                    <option value="'Nunito', sans-serif" class="text-black">Nunito</option>
-                                </select>
-                            </div>
+                            <select class="bg-indigo-600 text-white text-xs px-2 py-1 rounded outline-none" value={fontFamily} onChange={(e) => setFontFamily(e.target.value)}>
+                                <option value="'Times New Roman', Times, serif">Times New Roman</option>
+                                <option value="Arial, Helvetica, sans-serif">Arial</option>
+                                <option value="'Be Vietnam Pro', sans-serif">Be Vietnam Pro</option>
+                                <option value="'Nunito', sans-serif">Nunito</option>
+                            </select>
+
+                            <select class="bg-indigo-600 text-white text-xs px-2 py-1 rounded outline-none" value={theme} onChange={(e) => setTheme(e.target.value)}>
+                                <option value="theme-minimalist">Tối giản (In ấn)</option>
+                                <option value="theme-standard">Chuẩn mực</option>
+                                <option value="theme-creative">Sáng tạo</option>
+                                <option value="theme-competency">Năng lực</option>
+                            </select>
 
                             <div class="flex items-center gap-1 bg-indigo-600 px-2 py-1 rounded">
-                                <label class="text-xs font-semibold text-indigo-100">Style:</label>
-                                <select 
-                                    class="bg-transparent text-white text-sm border-none outline-none cursor-pointer"
-                                    value={theme} onChange={(e) => setTheme(e.target.value)}
-                                >
-                                    <option value="theme-minimalist" class="text-black">Tối giản (In ấn)</option>
-                                    <option value="theme-standard" class="text-black">Chuẩn mực</option>
-                                    <option value="theme-creative" class="text-black">Sáng tạo</option>
-                                    <option value="theme-competency" class="text-black">Năng lực</option>
-                                </select>
+                                <label class="text-xs font-semibold">Size:</label>
+                                <button onClick={() => setFontSize(Math.max(8, fontSize - 1))} class="text-white font-bold px-1 text-xs">-</button>
+                                <span class="text-white text-xs w-4 text-center">{fontSize}</span>
+                                <button onClick={() => setFontSize(Math.min(14, fontSize + 1))} class="text-white font-bold px-1 text-xs">+</button>
                             </div>
 
-                            <div class="flex items-center gap-1 bg-indigo-600 px-2 py-1 rounded">
-                                <label class="text-xs font-semibold text-indigo-100" title="Kích thước chữ">Cỡ chữ:</label>
-                                <div class="flex items-center gap-1">
-                                    <button onClick={() => setFontSize(Math.max(8, fontSize - 1))} class="text-white hover:text-yellow-300 font-bold px-1">-</button>
-                                    <span class="text-white text-xs w-4 text-center">{fontSize}</span>
-                                    <button onClick={() => setFontSize(Math.min(14, fontSize + 1))} class="text-white hover:text-yellow-300 font-bold px-1">+</button>
-                                </div>
-                            </div>
-
-                            <button 
-                                onClick={() => window.print()}
-                                class="bg-green-500 hover:bg-green-400 text-white px-4 py-1.5 rounded text-sm font-bold flex items-center gap-1 shadow transition ml-2"
-                            >
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path></svg>
-                                Xem / In PDF
-                            </button>
+                            <button onClick={() => window.print()} class="bg-green-500 text-white px-4 py-1.5 rounded text-sm font-bold shadow transition ml-2">Xem / In PDF</button>
                         </div>
                     </header>
 
                     {/* Main Workspace */}
                     <main class="flex flex-1 overflow-hidden">
-                        {/* Editor Sidebar */}
-                        <div class="w-1/2 p-4 flex flex-col border-r border-gray-300 bg-white no-print shrink-0 z-10 shadow-lg relative">
-                            <div class="mb-2 flex justify-between items-end">
-                                <h2 class="font-bold text-gray-700">Soạn thảo văn bản:</h2>
-                                <div class="text-xs text-gray-500 flex gap-2">
-                                    <span class="bg-gray-100 px-1 rounded border">Toán: $...$</span>
-                                    <span class="bg-red-50 text-red-600 px-1 rounded border border-red-200 font-bold" title="Gõ 3 dấu bằng để sang trang PDF mới">Ngắt trang mới: ===</span>
-                                </div>
-                            </div>
+                        <div class="w-1/2 p-4 flex flex-col border-r bg-white no-print shrink-0 z-10 shadow-lg">
                             <textarea 
-                                class="flex-1 w-full p-4 border border-gray-200 rounded-md font-mono text-sm resize-none focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-slate-50"
+                                class="flex-1 w-full p-4 border rounded-md font-mono text-sm resize-none focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-slate-50"
                                 value={markdown}
                                 onChange={(e) => setMarkdown(e.target.value)}
                                 spellcheck="false"
                             ></textarea>
                         </div>
 
-                        {/* Preview Area - Vùng chứa các trang giấy */}
                         <div class="w-1/2 bg-[#525659] overflow-y-auto flex flex-col items-center py-8 print-area-wrapper relative">
-                            
-                            {/* Wrapper hỗ trợ Zoom thu nhỏ trang giấy trên màn hình */}
                             <div 
                                 class="zoom-wrapper flex flex-col items-center gap-8" 
                                 style={{ transform: `scale(${zoom})`, transformOrigin: 'top center' }}
                                 ref={previewRef}
                             >
                                 {pages.map((pageContent, index) => (
-                                    <div 
-                                        key={index}
-                                        class="bg-white w-[210mm] min-h-[297mm] shadow-2xl print-paper relative shrink-0"
-                                    >
+                                    <div key={index} class="bg-white w-[210mm] min-h-[297mm] shadow-2xl print-paper relative shrink-0">
                                         <div 
                                             class={`markdown-body ${theme} p-[15mm] h-full`} 
                                             style={{ fontFamily: fontFamily, fontSize: fontSize + 'px' }}
                                             dangerouslySetInnerHTML={processMarkdownPage(pageContent)} 
                                         />
-                                        {/* Đánh dấu số trang (Chỉ hiển thị trên màn hình, không in) */}
-                                        <div class="absolute bottom-4 right-4 text-gray-400 text-xs no-print select-none">
-                                            - Trang {index + 1} -
-                                        </div>
+                                        <div class="absolute bottom-4 right-4 text-gray-400 text-xs no-print">Trang {index + 1}</div>
                                     </div>
                                 ))}
                             </div>
-
                         </div>
                     </main>
 
                     {/* Modal Prompt Generator */}
                     {showPromptModal && (
-                        <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 no-print">
-                            <div class="bg-white rounded-lg shadow-xl w-full max-w-3xl flex flex-col max-h-[90vh] mx-4">
-                                <div class="px-6 py-4 border-b border-gray-200 flex justify-between items-center bg-indigo-50 rounded-t-lg">
-                                    <h3 class="text-lg font-bold text-indigo-800 flex items-center gap-2">🤖 Trợ Lý Soạn Lệnh AI</h3>
-                                    <button onClick={() => setShowPromptModal(false)} class="text-gray-500 hover:text-red-500 font-bold text-2xl">&times;</button>
+                        <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 no-print p-4">
+                            <div class="bg-white rounded-lg shadow-xl w-full max-w-lg p-6 flex flex-col gap-4">
+                                <h3 class="text-lg font-bold text-indigo-800">🤖 Trợ Lý Soạn Lệnh AI</h3>
+                                <div class="grid grid-cols-2 gap-2">
+                                    <input type="text" value={pSubject} onChange={e => setPSubject(e.target.value)} class="border rounded p-2 text-sm" placeholder="Môn học"/>
+                                    <input type="text" value={pGrade} onChange={e => setPGrade(e.target.value)} class="border rounded p-2 text-sm" placeholder="Lớp"/>
                                 </div>
-                                
-                                <div class="p-6 overflow-y-auto flex-1 flex flex-col gap-4">
-                                    <div class="grid grid-cols-2 gap-4">
-                                        <div><label class="block text-sm font-semibold mb-1">Môn học</label><input type="text" value={pSubject} onChange={e => setPSubject(e.target.value)} class="w-full border rounded p-2 text-sm"/></div>
-                                        <div><label class="block text-sm font-semibold mb-1">Khối Lớp</label><input type="text" value={pGrade} onChange={e => setPGrade(e.target.value)} class="w-full border rounded p-2 text-sm"/></div>
-                                    </div>
-                                    <div><label class="block text-sm font-semibold mb-1">Tên bài học</label><input type="text" value={pTopic} onChange={e => setPTopic(e.target.value)} class="w-full border rounded p-2 text-sm"/></div>
-                                    <div><label class="block text-sm font-semibold mb-1">Yêu cầu đặc biệt (Nếu có)</label><textarea value={pExtra} onChange={e => setPExtra(e.target.value)} class="w-full border rounded p-2 text-sm h-16"></textarea></div>
-                                    <div>
-                                        <label class="block text-sm font-semibold text-indigo-700 mb-1">COPY ĐOẠN NÀY GỬI CHO AI:</label>
-                                        <textarea readOnly value={generatedPrompt} class="w-full bg-gray-50 border-2 border-dashed border-indigo-300 rounded p-3 text-xs font-mono text-gray-700 h-32 focus:outline-none"></textarea>
-                                    </div>
-                                </div>
-                                
-                                <div class="px-6 py-4 border-t flex justify-end gap-3 bg-gray-50 rounded-b-lg">
-                                    <button onClick={() => setShowPromptModal(false)} class="px-5 py-2 border rounded hover:bg-gray-200">Đóng</button>
-                                    <button onClick={handleCopyPrompt} class="px-5 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700 font-bold flex items-center gap-2">
+                                <input type="text" value={pTopic} onChange={e => setPTopic(e.target.value)} class="border rounded p-2 text-sm" placeholder="Tên bài"/>
+                                <textarea readOnly value={generatedPrompt} class="w-full bg-gray-50 border border-dashed rounded p-3 text-xs font-mono h-32 focus:outline-none"></textarea>
+                                <div class="flex justify-end gap-3 pt-2">
+                                    <button onClick={() => setShowPromptModal(false)} class="px-4 py-2 border rounded text-sm hover:bg-gray-100 transition">Đóng</button>
+                                    <button onClick={handleCopyPrompt} class="px-4 py-2 bg-indigo-600 text-white rounded font-bold text-sm shadow transition">
                                         {copySuccess ? "✔ Đã Copy!" : "Copy Prompt"}
                                     </button>
                                 </div>
